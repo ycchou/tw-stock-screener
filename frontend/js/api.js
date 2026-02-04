@@ -5,7 +5,8 @@
 
 const API = {
     // 後端 API 基礎 URL
-    BASE_URL: 'http://192.168.50.79:8000',
+    // 後端 API 基礎 URL (動態取得當前主機名稱，預設 Port 8000)
+    BASE_URL: `http://${window.location.hostname}:8000`,
 
     /**
      * 設定 API 基礎 URL
