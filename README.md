@@ -21,41 +21,52 @@
 - TradingView Lightweight Charts
 - Service Worker 離線快取
 
-## 快速開始
+## 快速啟動 (Windows 推薦)
+
+專案根目錄附帶了一個 PowerShell 啟動腳本，可同時開啟前後端並設定好網路連線。
+
+1. 在專案根目錄右鍵點擊 `start_server.ps1`，選擇「使用 PowerShell 執行」。
+2. 或者在終端機輸入：
+   ```powershell
+   .\start_server.ps1
+   ```
+3. 腳本會自動開啟兩個視窗，並顯示：
+   - 電腦端網址：http://localhost:3000
+   - 手機端網址：http://192.168.xx.xx:3000 (請確保手機連線到同一 Wi-Fi)
+
+---
+
+## 手動啟動
+
+若您想詳細控制或在其他平台執行，請依序啟動前後端：
 
 ### 1. 啟動後端服務
 
 ```bash
 cd backend
 
-# 建立虛擬環境
-python -m venv venv
-
-# 啟用虛擬環境 (Windows)
+# 啟用虛擬環境 (如果未啟用)
 .\venv\Scripts\activate
 
-# 安裝依賴
-pip install -r requirements.txt
-
-# 啟動服務
-uvicorn main:app --reload --port 8000
+# 啟動服務 (加上 --host 0.0.0.0 以允許手機連線)
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ### 2. 啟動前端服務
 
+開啟新的終端機視窗：
+
 ```bash
 cd frontend
 
-# 使用 npx serve 啟動
-npx serve .
-
-# 或使用 Python 簡易伺服器
+# 使用 Python 簡易伺服器
 python -m http.server 3000
 ```
 
 ### 3. 開啟瀏覽器
 
-前往 http://localhost:3000 (或 serve 顯示的網址)
+- **電腦**：前往 http://localhost:3000
+- **手機**：前往您的電腦 IP (例如 http://192.168.50.79:3000)
 
 ## API 文件
 
