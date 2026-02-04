@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Artifacts & Temporary
+artifacts/
+*.log
+
+# Playwright / Testing
+frontend/test-results/
+playwright-report/
+blob-report/
+test-results/

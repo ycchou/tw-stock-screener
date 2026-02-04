@@ -1,0 +1,74 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: 📈
+        - heading "台股均線糾結篩選器" [level=1] [ref=e7]
+      - button "重新載入" [ref=e9] [cursor=pointer]:
+        - img [ref=e10]
+  - main [ref=e15]:
+    - complementary [ref=e16]:
+      - generic [ref=e17]:
+        - heading "篩選條件" [level=2] [ref=e19]
+        - generic [ref=e20]:
+          - generic [ref=e21]:
+            - generic [ref=e22]: 均線選擇
+            - generic [ref=e23]:
+              - generic [ref=e26] [cursor=pointer]: 5日
+              - generic [ref=e29] [cursor=pointer]: 10日
+              - generic [ref=e32] [cursor=pointer]: 20日
+              - generic [ref=e35] [cursor=pointer]: 60日
+              - generic [ref=e38] [cursor=pointer]: 120日
+              - generic [ref=e41] [cursor=pointer]: 240日
+          - generic [ref=e42]:
+            - generic [ref=e43]:
+              - text: 糾結幅度
+              - generic [ref=e44]: 3%
+            - slider [ref=e45] [cursor=pointer]: "3"
+            - generic [ref=e46]:
+              - generic [ref=e47]: 1%
+              - generic [ref=e48]: 10%
+          - generic [ref=e49]:
+            - generic [ref=e50]:
+              - text: 糾結天數
+              - generic [ref=e51]: 5 天
+            - slider [ref=e52] [cursor=pointer]: "5"
+            - generic [ref=e53]:
+              - generic [ref=e54]: 1天
+              - generic [ref=e55]: 30天
+          - generic [ref=e56]:
+            - generic [ref=e57]: 市場
+            - generic [ref=e58]:
+              - generic [ref=e61] [cursor=pointer]: 全部
+              - generic [ref=e64] [cursor=pointer]: 上市
+              - generic [ref=e67] [cursor=pointer]: 上櫃
+          - button "開始篩選" [ref=e68] [cursor=pointer]:
+            - generic [ref=e69]: 開始篩選
+      - generic [ref=e70]:
+        - generic [ref=e71]:
+          - heading "篩選結果" [level=2] [ref=e72]
+          - generic [ref=e73]: 0 檔
+        - generic [ref=e76]:
+          - img [ref=e77]
+          - paragraph [ref=e80]: 設定條件後點擊「開始篩選」
+    - generic [ref=e82]:
+      - generic [ref=e83]:
+        - heading "選擇股票查看 K 線圖" [level=2] [ref=e85]
+        - generic [ref=e87]:
+          - button "1M" [ref=e88] [cursor=pointer]
+          - button "2M" [ref=e89] [cursor=pointer]
+          - button "4M" [ref=e90] [cursor=pointer]
+          - button "8M" [ref=e91] [cursor=pointer]
+      - table [ref=e95]:
+        - row [ref=e96]:
+          - cell
+          - cell [ref=e97]
+          - cell [ref=e101]
+        - row [ref=e105]:
+          - cell
+          - cell [ref=e106]
+          - cell [ref=e110]
+```

@@ -1,0 +1,215 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: 📈
+        - heading "台股均線糾結篩選器" [level=1] [ref=e7]
+      - button "重新載入" [ref=e9] [cursor=pointer]:
+        - img [ref=e10]
+  - main [ref=e15]:
+    - complementary [ref=e16]:
+      - generic [ref=e17]:
+        - heading "篩選條件" [level=2] [ref=e19]
+        - generic [ref=e20]:
+          - generic [ref=e21]:
+            - generic [ref=e22]: 均線選擇
+            - generic [ref=e23]:
+              - generic [ref=e26] [cursor=pointer]: 5日
+              - generic [ref=e29] [cursor=pointer]: 10日
+              - generic [ref=e32] [cursor=pointer]: 20日
+              - generic [ref=e35] [cursor=pointer]: 60日
+              - generic [ref=e38] [cursor=pointer]: 120日
+              - generic [ref=e41] [cursor=pointer]: 240日
+          - generic [ref=e42]:
+            - generic [ref=e43]:
+              - text: 糾結幅度
+              - generic [ref=e44]: 3%
+            - slider [ref=e45] [cursor=pointer]: "3"
+            - generic [ref=e46]:
+              - generic [ref=e47]: 1%
+              - generic [ref=e48]: 10%
+          - generic [ref=e49]:
+            - generic [ref=e50]:
+              - text: 糾結天數
+              - generic [ref=e51]: 5 天
+            - slider [ref=e52] [cursor=pointer]: "5"
+            - generic [ref=e53]:
+              - generic [ref=e54]: 1天
+              - generic [ref=e55]: 30天
+          - generic [ref=e56]:
+            - generic [ref=e57]: 市場
+            - generic [ref=e58]:
+              - generic [ref=e61] [cursor=pointer]: 全部
+              - generic [ref=e64] [cursor=pointer]: 上市
+              - generic [ref=e67] [cursor=pointer]: 上櫃
+          - button "開始篩選" [ref=e68] [cursor=pointer]:
+            - generic [ref=e69]: 開始篩選
+      - generic [ref=e70]:
+        - generic [ref=e71]:
+          - heading "篩選結果" [level=2] [ref=e72]
+          - generic [ref=e73]: 20 檔
+        - generic [ref=e75]:
+          - generic [ref=e76] [cursor=pointer]:
+            - generic [ref=e77]:
+              - generic [ref=e78]: "2801"
+              - generic [ref=e79]: 彰銀
+            - generic [ref=e80]:
+              - generic [ref=e81]: "20.45"
+              - generic [ref=e82]: 0.36%
+          - generic [ref=e83] [cursor=pointer]:
+            - generic [ref=e84]:
+              - generic [ref=e85]: "4904"
+              - generic [ref=e86]: 遠傳
+            - generic [ref=e87]:
+              - generic [ref=e88]: "90"
+              - generic [ref=e89]: 0.58%
+          - generic [ref=e90] [cursor=pointer]:
+            - generic [ref=e91]:
+              - generic [ref=e92]: "2385"
+              - generic [ref=e93]: 群光
+            - generic [ref=e94]:
+              - generic [ref=e95]: "118"
+              - generic [ref=e96]: 0.78%
+          - generic [ref=e97] [cursor=pointer]:
+            - generic [ref=e98]:
+              - generic [ref=e99]: "5871"
+              - generic [ref=e100]: 中租-KY
+            - generic [ref=e101]:
+              - generic [ref=e102]: "105"
+              - generic [ref=e103]: 0.82%
+          - generic [ref=e104] [cursor=pointer]:
+            - generic [ref=e105]:
+              - generic [ref=e106]: "2382"
+              - generic [ref=e107]: 廣達
+            - generic [ref=e108]:
+              - generic [ref=e109]: "278"
+              - generic [ref=e110]: 1.22%
+          - generic [ref=e111] [cursor=pointer]:
+            - generic [ref=e112]:
+              - generic [ref=e113]: "2412"
+              - generic [ref=e114]: 中華電
+            - generic [ref=e115]:
+              - generic [ref=e116]: "133"
+              - generic [ref=e117]: 1.26%
+          - generic [ref=e118] [cursor=pointer]:
+            - generic [ref=e119]:
+              - generic [ref=e120]: "1210"
+              - generic [ref=e121]: 大成
+            - generic [ref=e122]:
+              - generic [ref=e123]: "51"
+              - generic [ref=e124]: 1.37%
+          - generic [ref=e125] [cursor=pointer]:
+            - generic [ref=e126]:
+              - generic [ref=e127]: "2892"
+              - generic [ref=e128]: 第一金
+            - generic [ref=e129]:
+              - generic [ref=e130]: "28.9"
+              - generic [ref=e131]: 1.5%
+          - generic [ref=e132] [cursor=pointer]:
+            - generic [ref=e133]:
+              - generic [ref=e134]: "9904"
+              - generic [ref=e135]: 寶成
+            - generic [ref=e136]:
+              - generic [ref=e137]: "30.8"
+              - generic [ref=e138]: 1.5%
+          - generic [ref=e139] [cursor=pointer]:
+            - generic [ref=e140]:
+              - generic [ref=e141]: "6176"
+              - generic [ref=e142]: 瑞儀
+            - generic [ref=e143]:
+              - generic [ref=e144]: "122.5"
+              - generic [ref=e145]: 1.84%
+          - generic [ref=e146] [cursor=pointer]:
+            - generic [ref=e147]:
+              - generic [ref=e148]: "3045"
+              - generic [ref=e149]: 台灣大
+            - generic [ref=e150]:
+              - generic [ref=e151]: "104.5"
+              - generic [ref=e152]: 1.86%
+          - generic [ref=e153] [cursor=pointer]:
+            - generic [ref=e154]:
+              - generic [ref=e155]: "1476"
+              - generic [ref=e156]: 儒鴻
+            - generic [ref=e157]:
+              - generic [ref=e158]: "399.5"
+              - generic [ref=e159]: 1.91%
+          - generic [ref=e160] [cursor=pointer]:
+            - generic [ref=e161]:
+              - generic [ref=e162]: "2105"
+              - generic [ref=e163]: 正新
+            - generic [ref=e164]:
+              - generic [ref=e165]: "30.2"
+              - generic [ref=e166]: 1.99%
+          - generic [ref=e167] [cursor=pointer]:
+            - generic [ref=e168]:
+              - generic [ref=e169]: "5880"
+              - generic [ref=e170]: 合庫金
+            - generic [ref=e171]:
+              - generic [ref=e172]: "23.55"
+              - generic [ref=e173]: 2.19%
+          - generic [ref=e174] [cursor=pointer]:
+            - generic [ref=e175]:
+              - generic [ref=e176]: "2474"
+              - generic [ref=e177]: 可成
+            - generic [ref=e178]:
+              - generic [ref=e179]: "205"
+              - generic [ref=e180]: 2.22%
+          - generic [ref=e181] [cursor=pointer]:
+            - generic [ref=e182]:
+              - generic [ref=e183]: "2603"
+              - generic [ref=e184]: 長榮
+            - generic [ref=e185]:
+              - generic [ref=e186]: "188.5"
+              - generic [ref=e187]: 2.24%
+          - generic [ref=e188] [cursor=pointer]:
+            - generic [ref=e189]:
+              - generic [ref=e190]: "3034"
+              - generic [ref=e191]: 聯詠
+            - generic [ref=e192]:
+              - generic [ref=e193]: "367.5"
+              - generic [ref=e194]: 2.57%
+          - generic [ref=e195] [cursor=pointer]:
+            - generic [ref=e196]:
+              - generic [ref=e197]: "2881"
+              - generic [ref=e198]: 富邦金
+            - generic [ref=e199]:
+              - generic [ref=e200]: "92.7"
+              - generic [ref=e201]: 2.72%
+          - generic [ref=e202] [cursor=pointer]:
+            - generic [ref=e203]:
+              - generic [ref=e204]: "2834"
+              - generic [ref=e205]: 臺企銀
+            - generic [ref=e206]:
+              - generic [ref=e207]: "15.35"
+              - generic [ref=e208]: 2.95%
+          - generic [ref=e209] [cursor=pointer]:
+            - generic [ref=e210]:
+              - generic [ref=e211]: "2886"
+              - generic [ref=e212]: 兆豐金
+            - generic [ref=e213]:
+              - generic [ref=e214]: "39.15"
+              - generic [ref=e215]: 2.99%
+    - generic [ref=e217]:
+      - generic [ref=e218]:
+        - generic [ref=e219]:
+          - heading "彰銀" [level=2] [ref=e220]
+          - generic [ref=e221]: "2801"
+        - generic [ref=e223]:
+          - button "1M" [ref=e224] [cursor=pointer]
+          - button "2M" [ref=e225] [cursor=pointer]
+          - button "4M" [ref=e226] [cursor=pointer]
+          - button "8M" [ref=e227] [cursor=pointer]
+      - table [ref=e231]:
+        - row [ref=e232]:
+          - cell
+          - cell [ref=e233]
+          - cell [ref=e237]
+        - row [ref=e241]:
+          - cell
+          - cell [ref=e242]
+          - cell [ref=e246]
+  - generic [ref=e251]: 找到 20 檔符合條件的股票
+```

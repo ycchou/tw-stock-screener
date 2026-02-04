@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="台股均線糾結篩選器 - 找出均線糾結的潛力股">
+    <meta name="theme-color" content="#1a1a2e">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- TradingView Lightweight Charts -->
+    <script src="https://unpkg.com/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <title>台股均線糾結篩選器</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">📈</span>
+                    <h1>台股均線糾結篩選器</h1>
+                </div>
+                <div class="header-actions">
+                    <button id="refreshBtn" class="btn btn-icon" title="重新載入">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 2v6h-6"></path>
+                            <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+                            <path d="M3 22v-6h6"></path>
+                            <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar - Settings Panel -->
+            <aside class="sidebar">
+                <div class="panel settings-panel">
+                    <div class="panel-header">
+                        <h2>篩選條件</h2>
+                    </div>
+                    <div class="panel-body">
+                        <!-- MA Selection -->
+                        <div class="form-group">
+                            <label class="form-label">均線選擇</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="ma5" value="5" checked>
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">5日</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="ma10" value="10" checked>
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">10日</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="ma20" value="20" checked>
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">20日</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="ma60" value="60" checked>
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">60日</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="ma120" value="120">
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">120日</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="ma240" value="240">
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">240日</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Convergence Percentage -->
+                        <!-- Convergence Percentage -->
+                        <div class="form-group">
+                            <label class="form-label">糾結幅度</label>
+                            <div class="slider-input-group">
+                                <input type="range" id="convergencePct" class="range-slider" min="0.1" max="10"
+                                    step="0.1" value="3">
+                                <input type="number" id="convergencePctInput" class="number-input" min="0.1" max="10"
+                                    step="0.1" value="3">
+                            </div>
+                            <div class="range-labels">
+                                <span>0.1%</span>
+                                <span>10%</span>
+                            </div>
+                        </div>
+
+                        <!-- Convergence Days -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                糾結天數
+                                <span class="value-display" id="convergenceDaysValue">5 天</span>
+                            </label>
+                            <input type="range" id="convergenceDays" class="range-slider" min="1" max="30" step="1"
+                                value="5">
+                            <div class="range-labels">
+                                <span>1天</span>
+                                <span>30天</span>
+                            </div>
+                        </div>
+
+                        <!-- Market Selection -->
+                        <div class="form-group">
+                            <label class="form-label">市場</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="market" value="all" checked>
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-label">全部</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="market" value="TW">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-label">上市</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="market" value="TWO">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-label">上櫃</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Screen Button -->
+                        <button id="screenBtn" class="btn btn-primary btn-block">
+                            <span class="btn-text">開始篩選</span>
+                            <span class="btn-loader" style="display: none;">
+                                <svg class="spinner" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none"
+                                        stroke-dasharray="31.4 31.4" stroke-linecap="round" />
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stock List Panel -->
+                <div class="panel stock-list-panel">
+                    <div class="panel-header">
+                        <h2>篩選結果</h2>
+                        <span class="result-count" id="resultCount">0 檔</span>
+                    </div>
+                    <div class="panel-body">
+                        <div id="stockList" class="stock-list">
+                            <div class="empty-state">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <p>設定條件後點擊「開始篩選」</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Chart Area -->
+            <section class="chart-section">
+                <div class="panel chart-panel">
+                    <div class="panel-header">
+                        <div class="chart-title">
+                            <h2 id="chartStockName">選擇股票查看 K 線圖</h2>
+                            <span class="chart-stock-code" id="chartStockCode"></span>
+                        </div>
+                        <div class="chart-controls">
+                            <div class="chart-period-btns">
+                                <button class="btn btn-sm period-btn" data-days="30">1M</button>
+                                <button class="btn btn-sm period-btn" data-days="60">2M</button>
+                                <button class="btn btn-sm period-btn active" data-days="120">4M</button>
+                                <button class="btn btn-sm period-btn" data-days="240">8M</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body chart-body">
+                        <div id="chartContainer" class="chart-container">
+                            <div class="chart-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                </svg>
+                                <p>從左側列表點選股票查看 K 線圖</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stock Info Cards -->
+                <div class="info-cards" id="infoCards" style="display: none;">
+                    <div class="info-card">
+                        <div class="info-card-label">收盤價</div>
+                        <div class="info-card-value" id="infoClose">-</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-label">糾結幅度</div>
+                        <div class="info-card-value" id="infoConvergence">-</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-label">市場</div>
+                        <div class="info-card-value" id="infoMarket">-</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">正在篩選股票...</p>
+                <p class="loading-subtext" id="loadingProgress">請稍候</p>
+            </div>
+        </div>
+
+        <!-- Toast Container -->
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/app.js"></script>
+
+    <!-- Register Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker 已註冊'))
+                    .catch(err => console.log('Service Worker 註冊失敗:', err));
+            });
+        }
+    </script>
+</body>
+
+</html>
