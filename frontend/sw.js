@@ -3,7 +3,7 @@
  * 提供離線快取功能
  */
 
-const CACHE_NAME = 'tw-stock-screener-v17';
+const CACHE_NAME = 'tw-stock-screener-v18';
 const STATIC_ASSETS = [
     '/',
     '/index.html',

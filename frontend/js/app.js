@@ -41,8 +41,6 @@ const App = {
             infoMarket: document.getElementById('infoMarket'),
             toastContainer: document.getElementById('toastContainer'),
         };
-
-        ChartManager.init('chartContainer');
     },
 
     bindEvents() {
@@ -139,7 +137,15 @@ const App = {
         }
     },
 
-    // handlePeriodChange 已移除，因為 TradingView Widget 自帶週期控制
+    handlePeriodChange(e) {
+        document.querySelectorAll('.period-btn').forEach(btn => btn.classList.remove('active'));
+        e.target.classList.add('active');
+        this.state.selectedDays = parseInt(e.target.dataset.days);
+
+        if (this.state.selectedStock) {
+            this.loadStockChart(this.state.selectedStock.code);
+        }
+    },
 
     handleIntervalChange(e) {
         // 切換 active 狀態
@@ -211,16 +217,14 @@ const App = {
 
     async loadStockChart(code) {
         try {
-            const stock = this.state.stocks.find(s => s.code === code);
-            const market = stock ? stock.market : 'TW'; // Default to TW if not found (shouldn't happen)
             const maPeriods = this.getSelectedMAPeriods();
-
-            ChartManager.loadChart(
+            const data = await API.getStockKline(
                 code,
-                market,
-                this.state.selectedInterval,
-                maPeriods
+                this.state.selectedDays,
+                maPeriods,
+                this.state.selectedInterval
             );
+            ChartManager.setData(data);
         } catch (error) {
             console.error('Load chart error:', error);
             this.showToast(`載入圖表失敗: ${error.message}`, 'error');
