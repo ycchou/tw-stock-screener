@@ -8,14 +8,17 @@ const ChartManager = {
     maLines: {},
     container: null,
 
-    MA_COLORS: {
-        MA5: '#ff6b6b',
-        MA10: '#ffd93d',
-        MA20: '#6bcb77',
-        MA60: '#4d96ff',
-        MA120: '#ff9ff3',
-        MA240: '#a29bfe',
-    },
+    // 均線顏色池
+    COLOR_PALETTE: [
+        '#ff6b6b', // Red
+        '#ffd93d', // Yellow
+        '#6bcb77', // Green
+        '#4d96ff', // Blue
+        '#ff9ff3', // Pink
+        '#a29bfe', // Purple
+        '#00d2d3', // Cyan
+        '#ff9f43', // Orange
+    ],
 
     init(containerId) {
         this.container = document.getElementById(containerId);
@@ -102,16 +105,26 @@ const ChartManager = {
         this.maLines = {};
 
         if (data.ma_lines) {
-            Object.entries(data.ma_lines).forEach(([maName, maData]) => {
-                if (maData && maData.length > 0) this.addMALine(maName, maData);
+            // 將 MA 排序 (從小到大) 以便分配顏色
+            const sortedMAs = Object.entries(data.ma_lines).sort((a, b) => {
+                const periodA = parseInt(a[0].replace('ma', '')) || 0;
+                const periodB = parseInt(b[0].replace('ma', '')) || 0;
+                return periodA - periodB;
+            });
+
+            sortedMAs.forEach(([maName, maData], index) => {
+                if (maData && maData.length > 0) {
+                    // 使用調色盤分配顏色
+                    const color = this.COLOR_PALETTE[index % this.COLOR_PALETTE.length];
+                    this.addMALine(maName, maData, color);
+                }
             });
         }
 
         this.chart.timeScale().fitContent();
     },
 
-    addMALine(maName, maData) {
-        const color = this.MA_COLORS[maName] || '#ffffff';
+    addMALine(maName, maData, color) {
         const lineSeries = this.chart.addLineSeries({
             color: color,
             lineWidth: 1.5,
