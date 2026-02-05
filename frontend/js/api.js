@@ -5,8 +5,11 @@
 
 const API = {
     // 後端 API 基礎 URL
-    // 後端 API 基礎 URL (動態取得當前主機名稱，預設 Port 8000)
-    BASE_URL: `http://${window.location.hostname}:8000`,
+    // 如果是 Port 3000 (開發用)，則連線到 :8000
+    // 否則 (Port 8000 或其他)，代表是由後端直接服務，使用當前 Origin
+    BASE_URL: window.location.port === '3000'
+        ? `http://${window.location.hostname}:8000`
+        : window.location.origin,
 
     /**
      * 設定 API 基礎 URL
