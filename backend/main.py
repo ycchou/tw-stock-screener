@@ -42,7 +42,7 @@ class ScreenRequest(BaseModel):
     convergence_pct: float = 3.0
     convergence_days: int = 5
     market: Optional[str] = "all"  # all, TW, TWO
-    interval: str = "1d"  # K線週期: 1m, 5m, 15m, 30m, 1h, 4h, 1d, 1wk, 1mo
+    interval: str = "1d"  # K線週期: 15m, 30m, 1h, 4h, 1d, 1wk, 1mo
 
 
 class StockInfo(BaseModel):
@@ -127,7 +127,7 @@ async def get_stock_kline(
     - code: 股票代碼 (如 2330)
     - days: 取幾天的數據 (用於日K以上週期)
     - ma_periods: 要計算的均線週期，逗號分隔
-    - interval: K 線週期 (1m, 5m, 15m, 30m, 1h, 4h, 1d, 1wk, 1mo)
+    - interval: K 線週期 (15m, 30m, 1h, 4h, 1d, 1wk, 1mo)
     """
     try:
         # 解析均線週期

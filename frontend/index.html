@@ -62,8 +62,6 @@
                         <div class="form-group">
                             <label class="form-label">K線週期</label>
                             <div class="interval-selector" style="justify-content: flex-start; gap: 4px;">
-                                <button class="btn btn-sm interval-btn" data-interval="1m">1分</button>
-                                <button class="btn btn-sm interval-btn" data-interval="5m">5分</button>
                                 <button class="btn btn-sm interval-btn" data-interval="15m">15分</button>
                                 <button class="btn btn-sm interval-btn" data-interval="30m">30分</button>
                                 <button class="btn btn-sm interval-btn" data-interval="1h">1時</button>
@@ -135,14 +133,14 @@
                         <!-- Convergence Days -->
                         <div class="form-group">
                             <label class="form-label">
-                                糾結天數
-                                <span class="value-display" id="convergenceDaysValue">5 天</span>
+                                糾結 K 棒數 (Bars)
+                                <span class="value-display" id="convergenceDaysValue">5 根</span>
                             </label>
                             <input type="range" id="convergenceDays" class="range-slider" min="1" max="30" step="1"
                                 value="5">
                             <div class="range-labels">
-                                <span>1天</span>
-                                <span>30天</span>
+                                <span>1根</span>
+                                <span>30根</span>
                             </div>
                         </div>
 

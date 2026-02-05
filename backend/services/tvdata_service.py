@@ -14,16 +14,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Interval 對應 yfinance 格式
-INTERVAL_MAP = {
-    "1m": "1m",      # yfinance 支援，但台股可能沒資料
-    "5m": "5m",
+    # "1m": "1m",   # 移除 1m (不穩定)
+    # "5m": "5m",   # 移除 5m (不穩定)
     "15m": "15m",
     "30m": "30m",
-    "1h": "1h",      # yfinance 用 60m 或 1h
-    "4h": "4h",      # yfinance 可能不支援，需要自己合併
-    "1d": "1d",      # 日K - 主要支援
-    "1wk": "1wk",    # 週K
-    "1mo": "1mo",    # 月K
+    "1h": "1h",
+    "4h": "4h",
+    "1d": "1d",
+    "1wk": "1wk",
+    "1mo": "1mo",
 }
 
 # 台股代碼對應 yfinance 格式
@@ -81,22 +80,17 @@ class MultiTimeframeService:
             
             ticker = yf.Ticker(symbol)
             
-            # 根據 interval 決定 period
-            if interval in ["1m", "5m", "15m", "30m"]:
-                # 分鐘 K 最多取 7 天
-                period = "7d"
+            # 根據 interval 決定 period (使用 yfinance 最大支援天數)
+            if interval in ["15m", "30m"]:
+                period = "59d"  # yfinance limit ~60d
             elif interval in ["1h", "4h"]:
-                # 小時 K 最多取 60 天
-                period = "60d"
+                period = "720d" # yfinance limit 730d
             elif interval == "1d":
-                # 日K - 根據 n_bars 決定
-                period = f"{n_bars + 50}d"
+                period = f"{n_bars + 60}d" # 取多一點確保 MA
             elif interval == "1wk":
-                # 週K
                 period = f"{n_bars * 7}d"
             elif interval == "1mo":
-                # 月K
-                period = f"{n_bars * 30}d"
+                period = f"{n_bars * 31}d"
             else:
                 period = "1y"
             

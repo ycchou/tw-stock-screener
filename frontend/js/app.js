@@ -75,7 +75,7 @@ const App = {
 
         // 更新天數顯示
         const days = this.elements.convergenceDays.value;
-        this.elements.convergenceDaysValue.textContent = `${days} 天`;
+        this.elements.convergenceDaysValue.textContent = `${days} 根`;
     },
 
     getSelectedMAPeriods() {
