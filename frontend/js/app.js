@@ -7,6 +7,7 @@ const App = {
         stocks: [],
         selectedStock: null,
         selectedDays: 120,
+        selectedInterval: '1d',
         isLoading: false,
     },
 
@@ -57,8 +58,14 @@ const App = {
 
         this.elements.convergenceDays.addEventListener('input', () => this.updateSliderValues());
 
+        // 顯示天數按鈕
         document.querySelectorAll('.period-btn').forEach(btn => {
             btn.addEventListener('click', (e) => this.handlePeriodChange(e));
+        });
+
+        // K線週期選擇
+        document.querySelectorAll('.interval-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => this.handleIntervalChange(e));
         });
     },
 
@@ -73,10 +80,15 @@ const App = {
 
     getSelectedMAPeriods() {
         const periods = [];
-        ['ma5', 'ma10', 'ma20', 'ma60', 'ma120', 'ma240'].forEach(id => {
-            const checkbox = document.getElementById(id);
-            if (checkbox && checkbox.checked) {
-                periods.push(parseInt(checkbox.value));
+        // 使用新的 ma-input-item 結構
+        document.querySelectorAll('.ma-input-item').forEach(item => {
+            const checkbox = item.querySelector('.ma-checkbox');
+            const input = item.querySelector('.ma-period-input');
+            if (checkbox && checkbox.checked && input) {
+                const value = parseInt(input.value);
+                if (value > 0 && value <= 500) {
+                    periods.push(value);
+                }
             }
         });
         return periods;
@@ -128,6 +140,18 @@ const App = {
         document.querySelectorAll('.period-btn').forEach(btn => btn.classList.remove('active'));
         e.target.classList.add('active');
         this.state.selectedDays = parseInt(e.target.dataset.days);
+
+        if (this.state.selectedStock) {
+            this.loadStockChart(this.state.selectedStock.code);
+        }
+    },
+
+    handleIntervalChange(e) {
+        // 切換 active 狀態
+        document.querySelectorAll('.interval-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+
+        this.state.selectedInterval = e.target.dataset.interval;
 
         if (this.state.selectedStock) {
             this.loadStockChart(this.state.selectedStock.code);
@@ -192,7 +216,12 @@ const App = {
     async loadStockChart(code) {
         try {
             const maPeriods = this.getSelectedMAPeriods();
-            const data = await API.getStockKline(code, this.state.selectedDays, maPeriods);
+            const data = await API.getStockKline(
+                code,
+                this.state.selectedDays,
+                maPeriods,
+                this.state.selectedInterval
+            );
             ChartManager.setData(data);
         } catch (error) {
             console.error('Load chart error:', error);

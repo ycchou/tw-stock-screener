@@ -11,6 +11,7 @@ import os
 from services.stock_data import StockDataService
 from services.ma_calculator import MACalculator
 from services.screener import MAConvergenceScreener
+from services.tvdata_service import get_tv_service
 
 app = FastAPI(
     title="台股均線糾結篩選器",
@@ -115,21 +116,63 @@ async def screen_stocks(request: ScreenRequest):
 async def get_stock_kline(
     code: str,
     days: int = 120,
-    ma_periods: str = "5,10,20,60"
+    ma_periods: str = "5,10,20,60",
+    interval: str = "1d"
 ):
     """
     取得個股 K 線數據與均線
     
     - code: 股票代碼 (如 2330)
-    - days: 取幾天的數據
+    - days: 取幾天的數據 (用於日K以上週期)
     - ma_periods: 要計算的均線週期，逗號分隔
+    - interval: K 線週期 (1m, 5m, 15m, 30m, 1h, 4h, 1d, 1wk, 1mo)
     """
     try:
         # 解析均線週期
         periods = [int(p.strip()) for p in ma_periods.split(",")]
         
-        # 取得 K 線數據
-        result = await stock_service.get_stock_kline(code, days, periods)
+        # 根據 interval 決定資料來源
+        if interval == "1d":
+            # 日K 使用原本的 yfinance (較穩定)
+            result = await stock_service.get_stock_kline(code, days, periods)
+        else:
+            # 其他週期使用 TradingView
+            tv_service = get_tv_service()
+            market = stock_service.get_stock_market(code)
+            
+            # 計算需要的 K 棒數量
+            n_bars = days if interval in ["1d", "1wk", "1mo"] else days * 8  # 分鐘K需要更多bars
+            
+            df = await tv_service.get_kline_data(code, market, interval, n_bars)
+            
+            if df is None or df.empty:
+                raise HTTPException(status_code=404, detail=f"找不到股票 {code} 的 {interval} 資料")
+            
+            # 計算均線
+            ma_lines = {}
+            for period in periods:
+                if len(df) >= period:
+                    ma_lines[f"ma{period}"] = df["Close"].rolling(window=period).mean().dropna().tolist()
+            
+            # 格式化 OHLC
+            ohlc = []
+            for idx, row in df.iterrows():
+                ohlc.append({
+                    "time": idx.strftime("%Y-%m-%d %H:%M") if interval not in ["1d", "1wk", "1mo"] else idx.strftime("%Y-%m-%d"),
+                    "open": float(row["Open"]),
+                    "high": float(row["High"]),
+                    "low": float(row["Low"]),
+                    "close": float(row["Close"]),
+                    "volume": int(row["Volume"]) if "Volume" in row else 0
+                })
+            
+            result = {
+                "code": code,
+                "name": stock_service.get_stock_name(code),
+                "ohlc": ohlc,
+                "ma_lines": ma_lines,
+                "interval": interval
+            }
         
         if not result:
             raise HTTPException(status_code=404, detail=f"找不到股票 {code}")

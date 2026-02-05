@@ -96,11 +96,12 @@ const API = {
      * @param {string} code - 股票代碼
      * @param {number} days - 取幾天的數據
      * @param {number[]} maPeriods - 要計算的均線週期
+     * @param {string} interval - K 線週期 (1m, 5m, 15m, 30m, 1h, 4h, 1d, 1wk, 1mo)
      * @returns {Promise<Object>} - K 線數據與均線
      */
-    async getStockKline(code, days = 120, maPeriods = [5, 10, 20, 60]) {
+    async getStockKline(code, days = 120, maPeriods = [5, 10, 20, 60], interval = '1d') {
         const maPeriodsStr = maPeriods.join(',');
-        return this.request(`/api/stock/${code}/kline?days=${days}&ma_periods=${maPeriodsStr}`);
+        return this.request(`/api/stock/${code}/kline?days=${days}&ma_periods=${maPeriodsStr}&interval=${interval}`);
     },
 
     /**

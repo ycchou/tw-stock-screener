@@ -58,39 +58,45 @@
                         <h2>篩選條件</h2>
                     </div>
                     <div class="panel-body">
-                        <!-- MA Selection -->
+                        <!-- MA Selection (可編輯) -->
                         <div class="form-group">
-                            <label class="form-label">均線選擇</label>
-                            <div class="checkbox-group">
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="ma5" value="5" checked>
+                            <label class="form-label">均線設定 (MA)</label>
+                            <div class="ma-input-group">
+                                <label class="ma-input-item">
+                                    <input type="checkbox" class="ma-checkbox" checked>
                                     <span class="checkbox-custom"></span>
-                                    <span class="checkbox-label">5日</span>
+                                    <span class="ma-label">MA</span>
+                                    <input type="number" class="ma-period-input" value="5" min="1" max="500">
                                 </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="ma10" value="10" checked>
+                                <label class="ma-input-item">
+                                    <input type="checkbox" class="ma-checkbox" checked>
                                     <span class="checkbox-custom"></span>
-                                    <span class="checkbox-label">10日</span>
+                                    <span class="ma-label">MA</span>
+                                    <input type="number" class="ma-period-input" value="10" min="1" max="500">
                                 </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="ma20" value="20" checked>
+                                <label class="ma-input-item">
+                                    <input type="checkbox" class="ma-checkbox" checked>
                                     <span class="checkbox-custom"></span>
-                                    <span class="checkbox-label">20日</span>
+                                    <span class="ma-label">MA</span>
+                                    <input type="number" class="ma-period-input" value="20" min="1" max="500">
                                 </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="ma60" value="60" checked>
+                                <label class="ma-input-item">
+                                    <input type="checkbox" class="ma-checkbox" checked>
                                     <span class="checkbox-custom"></span>
-                                    <span class="checkbox-label">60日</span>
+                                    <span class="ma-label">MA</span>
+                                    <input type="number" class="ma-period-input" value="60" min="1" max="500">
                                 </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="ma120" value="120">
+                                <label class="ma-input-item">
+                                    <input type="checkbox" class="ma-checkbox">
                                     <span class="checkbox-custom"></span>
-                                    <span class="checkbox-label">120日</span>
+                                    <span class="ma-label">MA</span>
+                                    <input type="number" class="ma-period-input" value="120" min="1" max="500">
                                 </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" id="ma240" value="240">
+                                <label class="ma-input-item">
+                                    <input type="checkbox" class="ma-checkbox">
                                     <span class="checkbox-custom"></span>
-                                    <span class="checkbox-label">240日</span>
+                                    <span class="ma-label">MA</span>
+                                    <input type="number" class="ma-period-input" value="240" min="1" max="500">
                                 </label>
                             </div>
                         </div>
@@ -191,6 +197,20 @@
                             <span class="chart-stock-code" id="chartStockCode"></span>
                         </div>
                         <div class="chart-controls">
+                            <!-- K線週期選擇 -->
+                            <div class="interval-selector">
+                                <span class="interval-label">週期：</span>
+                                <button class="btn btn-sm interval-btn" data-interval="1m">1分</button>
+                                <button class="btn btn-sm interval-btn" data-interval="5m">5分</button>
+                                <button class="btn btn-sm interval-btn" data-interval="15m">15分</button>
+                                <button class="btn btn-sm interval-btn" data-interval="30m">30分</button>
+                                <button class="btn btn-sm interval-btn" data-interval="1h">1時</button>
+                                <button class="btn btn-sm interval-btn" data-interval="4h">4時</button>
+                                <button class="btn btn-sm interval-btn active" data-interval="1d">日K</button>
+                                <button class="btn btn-sm interval-btn" data-interval="1wk">週K</button>
+                                <button class="btn btn-sm interval-btn" data-interval="1mo">月K</button>
+                            </div>
+                            <!-- 顯示筆數 -->
                             <div class="chart-period-btns">
                                 <button class="btn btn-sm period-btn" data-days="30">1M</button>
                                 <button class="btn btn-sm period-btn" data-days="60">2M</button>
