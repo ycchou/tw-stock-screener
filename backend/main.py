@@ -151,6 +151,43 @@ async def health_check():
     return {"status": "ok"}
 
 
+
+# ==================== 靜態檔案服務 (Frontend Integration) ====================
+
+# 取得 frontend 資料夾絕對路徑
+# 假設此檔案在 backend/main.py，則 frontend 在 ../frontend
+frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend"))
+
+if os.path.exists(frontend_dir):
+    print(f"Mounting frontend from: {frontend_dir}")
+    # Mount 靜態資源目錄
+    # 注意: 這裡將根路徑改為 StaticFiles 可能會蓋掉 API，所以我們用特定路徑 + root route
+    
+    app.mount("/css", StaticFiles(directory=os.path.join(frontend_dir, "css")), name="css")
+    app.mount("/js", StaticFiles(directory=os.path.join(frontend_dir, "js")), name="js")
+    app.mount("/icons", StaticFiles(directory=os.path.join(frontend_dir, "icons")), name="icons")
+
+    # 根路徑與單頁應用支援
+    from fastapi.responses import FileResponse
+
+    @app.get("/", include_in_schema=False)
+    async def serve_index():
+        return FileResponse(os.path.join(frontend_dir, "index.html"))
+
+    @app.get("/index.html", include_in_schema=False)
+    async def serve_index_file():
+        return FileResponse(os.path.join(frontend_dir, "index.html"))
+        
+    @app.get("/manifest.json", include_in_schema=False)
+    async def serve_manifest():
+        return FileResponse(os.path.join(frontend_dir, "manifest.json"))
+        
+    @app.get("/sw.js", include_in_schema=False)
+    async def serve_sw():
+        return FileResponse(os.path.join(frontend_dir, "sw.js"), media_type="application/javascript")
+
+
 if __name__ == "__main__":
     import uvicorn
+    # 整合模式下，我們統一使用 Port 8000
     uvicorn.run(app, host="0.0.0.0", port=8000)
