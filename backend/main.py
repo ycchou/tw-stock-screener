@@ -72,10 +72,6 @@ class StockKlineResponse(BaseModel):
 
 # ==================== API 端點 ====================
 
-@app.get("/")
-async def root():
-    """根路徑"""
-    return {"message": "台股均線糾結篩選器 API", "version": "1.0.0"}
 
 
 @app.get("/api/stocks", response_model=List[StockInfo])
