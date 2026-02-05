@@ -14,8 +14,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Interval 對應 yfinance 格式
-    # "1m": "1m",   # 移除 1m (不穩定)
-    # "5m": "5m",   # 移除 5m (不穩定)
+INTERVAL_MAP = {
     "15m": "15m",
     "30m": "30m",
     "1h": "1h",
