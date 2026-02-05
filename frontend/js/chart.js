@@ -1,161 +1,111 @@
 /**
- * 台股均線糾結篩選器 - K 線圖模組
+ * 台股均線糾結篩選器 - K 線圖模組 (TradingView Widget 版)
  */
 
 const ChartManager = {
-    chart: null,
-    candleSeries: null,
-    maLines: {},
-    container: null,
-
-    // 均線顏色池
-    COLOR_PALETTE: [
-        '#ff6b6b', // Red
-        '#ffd93d', // Yellow
-        '#6bcb77', // Green
-        '#4d96ff', // Blue
-        '#ff9ff3', // Pink
-        '#a29bfe', // Purple
-        '#00d2d3', // Cyan
-        '#ff9f43', // Orange
-    ],
+    widget: null,
+    containerId: null,
+    currentSymbol: null,
+    currentInterval: 'D',
 
     init(containerId) {
-        this.container = document.getElementById(containerId);
-        if (!this.container) return;
-        this.createChart();
-        this.setupResizeHandler();
+        this.containerId = containerId;
     },
 
-    createChart() {
-        if (this.chart) {
-            this.chart.remove();
-            this.chart = null;
-        }
+    /**
+     * 載入圖表
+     * @param {string} code 股票代碼 (e.g., '2330')
+     * @param {string} market 市場類型 (e.g., 'TW', 'TWO')
+     * @param {string} interval K線週期 (e.g., '1d', '15m')
+     * @param {Array} maPeriods 均線設定 (optional)
+     */
+    loadChart(code, market, interval, maPeriods = []) {
+        const symbol = this.getTradingViewSymbol(code, market);
+        const tvInterval = this.mapInterval(interval);
 
-        const placeholder = this.container.querySelector('.chart-placeholder');
-        if (placeholder) placeholder.style.display = 'none';
+        // 如果已經有 Widget 且 Symbol 一樣，只是一樣的圖表，可能不需要重繪
+        // 但為了確保 Interval 正確，我們還是重新載入或者使用 Widget API 切換
 
-        // 初始化圖例容器
-        const oldLegend = this.container.querySelector('.chart-legend');
-        if (oldLegend) oldLegend.remove();
+        // 這裡直接重新建立 Widget，確保乾淨
+        // 清空容器
+        document.getElementById(this.containerId).innerHTML = '';
 
-        this.legendElement = document.createElement('div');
-        this.legendElement.className = 'chart-legend';
-        this.legendElement.style.display = 'none';
-        this.container.appendChild(this.legendElement);
-
-        this.chart = LightweightCharts.createChart(this.container, {
-            width: this.container.clientWidth,
-            height: this.container.clientHeight || 400,
-            layout: {
-                background: { type: 'solid', color: '#1a1a2e' },
-                textColor: '#94a3b8',
-            },
-            grid: {
-                vertLines: { color: 'rgba(255, 255, 255, 0.05)' },
-                horzLines: { color: 'rgba(255, 255, 255, 0.05)' },
-            },
-            crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
-            rightPriceScale: { borderColor: 'rgba(255, 255, 255, 0.1)' },
-            timeScale: { borderColor: 'rgba(255, 255, 255, 0.1)', timeVisible: true },
-        });
-
-        this.candleSeries = this.chart.addCandlestickSeries({
-            upColor: '#ef5350',
-            downColor: '#26a69a',
-            borderUpColor: '#ef5350',
-            borderDownColor: '#26a69a',
-            wickUpColor: '#ef5350',
-            wickDownColor: '#26a69a',
-        });
-
-        this.maLines = {};
-    },
-
-    setupResizeHandler() {
-        const resizeObserver = new ResizeObserver((entries) => {
-            if (this.chart && entries[0]) {
-                const { width, height } = entries[0].contentRect;
-                this.chart.resize(width, height);
-            }
-        });
-        resizeObserver.observe(this.container);
-    },
-
-    setData(data) {
-        if (!this.chart || !this.candleSeries) this.createChart();
-        if (!data || !data.ohlc || data.ohlc.length === 0) return;
-
-        // 清空舊圖例
-        this.legendElement.innerHTML = '';
-        this.legendElement.style.display = 'flex';
-
-        const candleData = data.ohlc.map(item => ({
-            time: item.time,
-            open: item.open,
-            high: item.high,
-            low: item.low,
-            close: item.close,
+        // 轉換 MA 設定為 TradingView studies
+        // TradingView Widget 允許傳入 studies
+        const studies = maPeriods.map(period => ({
+            id: "MASimple@tv-basicstudies",
+            inputs: { length: period }
         }));
 
-        this.candleSeries.setData(candleData);
-
-        Object.values(this.maLines).forEach(series => this.chart.removeSeries(series));
-        this.maLines = {};
-
-        if (data.ma_lines) {
-            // 將 MA 排序 (從小到大) 以便分配顏色
-            const sortedMAs = Object.entries(data.ma_lines).sort((a, b) => {
-                const periodA = parseInt(a[0].replace('ma', '')) || 0;
-                const periodB = parseInt(b[0].replace('ma', '')) || 0;
-                return periodA - periodB;
-            });
-
-            sortedMAs.forEach(([maName, maData], index) => {
-                if (maData && maData.length > 0) {
-                    // 使用調色盤分配顏色
-                    const color = this.COLOR_PALETTE[index % this.COLOR_PALETTE.length];
-                    this.addMALine(maName, maData, color);
-                }
-            });
+        // 如果沒有指定 MA，預設至少一定要有 MA
+        if (studies.length === 0) {
+            studies.push({ id: "MASimple@tv-basicstudies", inputs: { length: 5 } });
+            studies.push({ id: "MASimple@tv-basicstudies", inputs: { length: 20 } });
         }
 
-        this.chart.timeScale().fitContent();
-    },
-
-    addMALine(maName, maData, color) {
-        const lineSeries = this.chart.addLineSeries({
-            color: color,
-            lineWidth: 1.5,
-            priceLineVisible: false,
-            lastValueVisible: false,
+        this.widget = new TradingView.widget({
+            "width": "100%",
+            "height": 500,
+            "symbol": symbol,
+            "interval": tvInterval,
+            "timezone": "Asia/Taipei",
+            "theme": "dark",
+            "style": "1", // 1=Candles
+            "locale": "zh_TW",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "hide_top_toolbar": false,
+            "hide_legend": false,
+            "save_image": false,
+            "container_id": this.containerId,
+            "studies": studies,
+            "disabled_features": [
+                "use_localstorage_for_settings",
+            ],
+            "enabled_features": [
+                "study_templates"
+            ]
         });
 
-        const lineData = maData
-            .filter(item => item.value !== null)
-            .map(item => ({ time: item.time, value: item.value }));
+        this.currentSymbol = symbol;
+        this.currentInterval = tvInterval;
+    },
 
-        if (lineData.length > 0) {
-            lineSeries.setData(lineData);
-            this.maLines[maName] = lineSeries;
+    /**
+     * 將應用程式的 interval 轉換為 TradingView 格式
+     */
+    mapInterval(interval) {
+        const map = {
+            '15m': '15',
+            '30m': '30',
+            '1h': '60',
+            '4h': '240',
+            '1d': 'D',
+            '1wk': 'W',
+            '1mo': 'M'
+        };
+        return map[interval] || 'D';
+    },
 
-            // 新增圖例項目
-            const item = document.createElement('div');
-            item.className = 'legend-item';
-            item.innerHTML = `
-                <div class="legend-color" style="background-color: ${color}"></div>
-                <span>${maName}</span>
-            `;
-            this.legendElement.appendChild(item);
+    /**
+     * 轉換股票代碼為 TradingView Symbol
+     */
+    getTradingViewSymbol(code, market) {
+        // 去除可能的 .TW 後綴
+        const cleanCode = code.replace('.TW', '').replace('.TWO', '');
+
+        if (market === 'TWO') {
+            return `TPEX:${cleanCode}`;
         }
+        // 預設為 TWSE (上市)
+        return `TWSE:${cleanCode}`;
     },
 
     clear() {
-        if (this.candleSeries) this.candleSeries.setData([]);
-        Object.values(this.maLines).forEach(s => this.chart && this.chart.removeSeries(s));
-        this.maLines = {};
-    },
+        if (this.containerId) {
+            document.getElementById(this.containerId).innerHTML = '';
+        }
+    }
 };
 
 window.ChartManager = ChartManager;
