@@ -151,16 +151,27 @@ async def get_stock_kline(
                 raise HTTPException(status_code=404, detail=f"找不到股票 {code} 的 {interval} 資料")
             
             # 計算均線
+            # 計算均線 (需包含時間與數值)
             ma_lines = {}
             for period in periods:
                 if len(df) >= period:
-                    ma_lines[f"ma{period}"] = df["Close"].rolling(window=period).mean().dropna().tolist()
+                    ma_series = df["Close"].rolling(window=period).mean().dropna()
+                    ma_data = []
+                    for idx, val in ma_series.items():
+                        time_val = int(idx.timestamp()) + 28800 if interval not in ["1d", "1wk", "1mo"] else idx.strftime("%Y-%m-%d")
+                         # 修正：加上 28800 (8小時) 確保時區正確，因為 timestamp() 是 UTC，而前端 chart 可能預設 UTC
+                         # 為了保險，這裡直接回傳 timestamp (UTC)，Lightweight Charts 會自動處理本地時區顯示
+                         # 但 yfinance 的 index 如果有 tz，timestamp() 會是準確的 UTC。
+                         # 讓我們保持簡單：int(idx.timestamp())
+                        time_val = int(idx.timestamp()) if interval not in ["1d", "1wk", "1mo"] else idx.strftime("%Y-%m-%d")
+                        ma_data.append({"time": time_val, "value": float(val)})
+                    ma_lines[f"ma{period}"] = ma_data
             
             # 格式化 OHLC
             ohlc = []
             for idx, row in df.iterrows():
                 ohlc.append({
-                    "time": idx.strftime("%Y-%m-%d %H:%M") if interval not in ["1d", "1wk", "1mo"] else idx.strftime("%Y-%m-%d"),
+                    "time": int(idx.timestamp()) if interval not in ["1d", "1wk", "1mo"] else idx.strftime("%Y-%m-%d"),
                     "open": float(row["Open"]),
                     "high": float(row["High"]),
                     "low": float(row["Low"]),
