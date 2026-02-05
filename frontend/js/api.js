@@ -77,9 +77,10 @@ const API = {
      * @param {number} params.convergencePct - 糾結幅度百分比
      * @param {number} params.convergenceDays - 連續糾結天數
      * @param {string} params.market - 市場類型
+     * @param {string} params.interval - K線週期
      * @returns {Promise<Array>} - 符合條件的股票列表
      */
-    async screenStocks({ maPeriods, convergencePct, convergenceDays, market }) {
+    async screenStocks({ maPeriods, convergencePct, convergenceDays, market, interval = '1d' }) {
         return this.request('/api/screen', {
             method: 'POST',
             body: JSON.stringify({
@@ -87,6 +88,7 @@ const API = {
                 convergence_pct: convergencePct,
                 convergence_days: convergenceDays,
                 market: market,
+                interval: interval,
             }),
         });
     },

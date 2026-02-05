@@ -42,6 +42,7 @@ class ScreenRequest(BaseModel):
     convergence_pct: float = 3.0
     convergence_days: int = 5
     market: Optional[str] = "all"  # all, TW, TWO
+    interval: str = "1d"  # K線週期: 1m, 5m, 15m, 30m, 1h, 4h, 1d, 1wk, 1mo
 
 
 class StockInfo(BaseModel):
@@ -105,7 +106,8 @@ async def screen_stocks(request: ScreenRequest):
             ma_periods=request.ma_periods,
             convergence_pct=request.convergence_pct,
             convergence_days=request.convergence_days,
-            market=request.market
+            market=request.market,
+            interval=request.interval
         )
         return results
     except Exception as e:

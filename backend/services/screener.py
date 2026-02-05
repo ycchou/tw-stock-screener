@@ -7,6 +7,7 @@ import logging
 
 from .stock_data import StockDataService
 from .ma_calculator import MACalculator
+from .tvdata_service import get_tv_service
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +30,8 @@ class MAConvergenceScreener:
         market: str,
         ma_periods: List[int],
         convergence_pct: float,
-        convergence_days: int
+        convergence_days: int,
+        interval: str = "1d"
     ) -> Dict:
         """
         篩選單支股票
@@ -38,8 +40,15 @@ class MAConvergenceScreener:
             符合條件時回傳股票資訊，否則回傳 None
         """
         try:
-            # 取得歷史數據
-            df = await self.stock_service.get_stock_history(code)
+            # 根據 interval 取得歷史數據
+            if interval == "1d":
+                df = await self.stock_service.get_stock_history(code)
+            else:
+                tv_service = get_tv_service()
+                # 根據週期決定取多少 K 棒 (確保足夠計算最長均線 + 糾結天數)
+                max_period = max(ma_periods) if ma_periods else 60
+                required_bars = max_period + convergence_days + 20
+                df = await tv_service.get_kline_data(code, market, interval, n_bars=required_bars)
             
             if df is None or df.empty:
                 return None
@@ -72,7 +81,8 @@ class MAConvergenceScreener:
         ma_periods: List[int] = [5, 10, 20, 60],
         convergence_pct: float = 3.0,
         convergence_days: int = 5,
-        market: str = "all"
+        market: str = "all",
+        interval: str = "1d"
     ) -> List[Dict]:
         """
         批量篩選均線糾結股票
@@ -90,7 +100,7 @@ class MAConvergenceScreener:
         stocks = self.stock_service.get_stock_list(market=market, limit=500)
         
         logger.info(f"開始篩選 {len(stocks)} 支股票...")
-        logger.info(f"條件: 均線={ma_periods}, 幅度<={convergence_pct}%, 天數={convergence_days}")
+        logger.info(f"條件: 週期={interval}, 均線={ma_periods}, 幅度<={convergence_pct}%, 天數={convergence_days}")
         
         # 並行處理（控制併發數量避免過載）
         semaphore = asyncio.Semaphore(10)
@@ -103,7 +113,8 @@ class MAConvergenceScreener:
                     market=stock["market"],
                     ma_periods=ma_periods,
                     convergence_pct=convergence_pct,
-                    convergence_days=convergence_days
+                    convergence_days=convergence_days,
+                    interval=interval
                 )
         
         # 執行並行篩選

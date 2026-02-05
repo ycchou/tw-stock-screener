@@ -111,6 +111,7 @@ const App = {
             convergencePct: parseFloat(this.elements.convergencePctInput.value),
             convergenceDays: parseInt(this.elements.convergenceDays.value),
             market: this.getSelectedMarket(),
+            interval: this.state.selectedInterval,
         };
 
         this.showLoading(true);
@@ -153,6 +154,7 @@ const App = {
 
         this.state.selectedInterval = e.target.dataset.interval;
 
+        // 如果已經有選中的股票，重新載入圖表 (使用新的週期)
         if (this.state.selectedStock) {
             this.loadStockChart(this.state.selectedStock.code);
         }

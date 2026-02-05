@@ -58,6 +58,21 @@
                         <h2>篩選條件</h2>
                     </div>
                     <div class="panel-body">
+                        <!-- K線週期選擇 -->
+                        <div class="form-group">
+                            <label class="form-label">K線週期</label>
+                            <div class="interval-selector" style="justify-content: flex-start; gap: 4px;">
+                                <button class="btn btn-sm interval-btn" data-interval="1m">1分</button>
+                                <button class="btn btn-sm interval-btn" data-interval="5m">5分</button>
+                                <button class="btn btn-sm interval-btn" data-interval="15m">15分</button>
+                                <button class="btn btn-sm interval-btn" data-interval="30m">30分</button>
+                                <button class="btn btn-sm interval-btn" data-interval="1h">1時</button>
+                                <button class="btn btn-sm interval-btn" data-interval="4h">4時</button>
+                                <button class="btn btn-sm interval-btn active" data-interval="1d">日K</button>
+                                <button class="btn btn-sm interval-btn" data-interval="1wk">週K</button>
+                                <button class="btn btn-sm interval-btn" data-interval="1mo">月K</button>
+                            </div>
+                        </div>
                         <!-- MA Selection (可編輯) -->
                         <div class="form-group">
                             <label class="form-label">均線設定 (MA)</label>
@@ -197,19 +212,7 @@
                             <span class="chart-stock-code" id="chartStockCode"></span>
                         </div>
                         <div class="chart-controls">
-                            <!-- K線週期選擇 -->
-                            <div class="interval-selector">
-                                <span class="interval-label">週期：</span>
-                                <button class="btn btn-sm interval-btn" data-interval="1m">1分</button>
-                                <button class="btn btn-sm interval-btn" data-interval="5m">5分</button>
-                                <button class="btn btn-sm interval-btn" data-interval="15m">15分</button>
-                                <button class="btn btn-sm interval-btn" data-interval="30m">30分</button>
-                                <button class="btn btn-sm interval-btn" data-interval="1h">1時</button>
-                                <button class="btn btn-sm interval-btn" data-interval="4h">4時</button>
-                                <button class="btn btn-sm interval-btn active" data-interval="1d">日K</button>
-                                <button class="btn btn-sm interval-btn" data-interval="1wk">週K</button>
-                                <button class="btn btn-sm interval-btn" data-interval="1mo">月K</button>
-                            </div>
+                            <!-- 顯示筆數 -->
                             <!-- 顯示筆數 -->
                             <div class="chart-period-btns">
                                 <button class="btn btn-sm period-btn" data-days="30">1M</button>
